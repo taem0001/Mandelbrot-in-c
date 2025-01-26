@@ -21,8 +21,7 @@ int iterate(struct Complex z0)
     struct Complex z1 = z0;
     for (int i = 0; i < MAX; i++)
     {
-        double modulusSquared = square(z1);
-        if (modulusSquared > 4.0)
+        if (square(z1) > 4.0)
         {
             return i;
         }
