@@ -7,7 +7,7 @@
 #include "complex.h"
 
 #define MAX 255
-#define GRIDSIZE 800
+#define GRIDSIZE 512
 
 struct RGB
 {
@@ -119,6 +119,16 @@ int main(int argc, char *argv[])
             if (event.type == SDL_EVENT_QUIT)
             {
                 running = 0;
+            }
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+            {
+                double x = centrum.re - s / 2 + (s * event.button.x) / GRIDSIZE;
+                double y = centrum.im - s / 2 + (s * event.button.y) / GRIDSIZE;
+                centrum.re = x;
+                centrum.im = y;
+                s *= 0.8;
+                draw(renderer, colArr, centrum, s);
+                SDL_RenderPresent(renderer);
             }
         }
     }
