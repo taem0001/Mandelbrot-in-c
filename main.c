@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
-#include "colors.h"
 #include "complex.h"
 
 #define MAX 255
@@ -62,20 +61,16 @@ void fill_rect(SDL_Renderer *renderer, struct RGB color, int x, int y)
 void draw(SDL_Renderer *renderer, struct RGB *colArr, struct Complex centrum, double s)
 {
 #pragma omp parallel for collapse(2)
+    for (int i = 0; i < GRIDSIZE; i++)
     {
-        for (int i = 0; i < GRIDSIZE; i++)
+        for (int j = 0; j < GRIDSIZE; j++)
         {
-            for (int j = 0; j < GRIDSIZE; j++)
-            {
-                struct Complex z;
-                z.re = centrum.re - s / 2 + (s * i) / (GRIDSIZE - 1);
-                z.im = centrum.im - s / 2 + (s * j) / (GRIDSIZE - 1);
-                struct RGB color = colArr[iterate(z)];
+            struct Complex z;
+            z.re = centrum.re - s / 2 + (s * i) / (GRIDSIZE - 1);
+            z.im = centrum.im - s / 2 + (s * j) / (GRIDSIZE - 1);
+            struct RGB color = colArr[iterate(z)];
 #pragma omp critical
-                {
-                    fill_rect(renderer, color, i, j);
-                }
-            }
+            fill_rect(renderer, color, i, j);
         }
     }
 }
